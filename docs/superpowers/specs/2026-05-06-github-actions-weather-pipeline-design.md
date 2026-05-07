@@ -21,16 +21,18 @@ Schedule `weather.py` to run automatically once per day using GitHub Actions. Ea
 
 Single job — `fetch-and-commit` — runs the following steps in order:
 
-1. **Checkout** — `actions/checkout@v4` with `fetch-depth: 0`
+1. **Checkout** — `actions/checkout@v4` (default depth; full history not needed)
 2. **Set up Python 3.11** — `actions/setup-python@v5`
 3. **Install dependencies** — `pip install -r requirements.txt`
 4. **Run pipeline** — `python weather.py` with `WEATHER_API_KEY` injected from a GitHub Secret
 5. **Commit & push CSV** — commits `weather_data.csv` with message `chore: update weather_data.csv [skip ci]` only if the file changed; skips the commit if `git diff --quiet` reports no changes
 
-## Secrets
+## Secrets & Tokens
 
 - `WEATHER_API_KEY` must be added to the repo under **Settings → Secrets and variables → Actions**
 - Injected as an environment variable; never printed to logs
+- **Push token**: `GITHUB_TOKEN` is automatically provided by GitHub Actions and used by the checkout action to authenticate `git push` — no additional token setup required
+- **Git identity**: the auto-commit is authored as `github-actions[bot] <github-actions[bot]@users.noreply.github.com>`, configured via `git config` in the commit step
 
 ## Error Handling
 
