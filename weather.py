@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import time
 import pandas as pd
@@ -41,6 +42,9 @@ for zip_code in zip_codes:
         "days": 7,
     }
     response = requests.get(api_url, params=params)
+    if response.status_code != 200:
+        print(f"API error for {zip_code} (HTTP {response.status_code}): {response.text}")
+        sys.exit(1)
     data = response.json()
 
     city = data["location"]["name"]
